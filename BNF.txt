@@ -1,0 +1,160 @@
+<program>::=      ‘PROGRAM’<name><newline><structs><function><main_program>
+
+
+<structs>::=           <structs><struct>
+			| empty
+			
+
+<struct>::=            'STRUCT' <newline><variable_declaration_list> 'ENDSTRUCT'
+                       | <typedef>
+          
+  
+<typedef>::= 		'TYPEDEF' 'STRUCT' <name> <newline> <variable_declaration_list> <name> 'ENDSTRUCT'							 
+			 
+<functions>::= 	 <function>
+             		| <functions><function>
+			| empty
+	
+	
+<function>::= 		'FUNCTION' <func_declare>';'<newline>
+            		| 'FUNCTION' <func_declare><newline><body_func>'END_FUNCTION'
+            		
+			
+<func_declare>::= 	<name>'('<parameter_list>')'
+
+
+<parameter_list>::= 	<parameter>
+                  	| <parameter_list>','<parameter>
+                  	
+
+<parameter>::= 	<type_specifier><name_list>
+
+
+<type_specifier>::= 	'CHAR'
+			|'INTEGER'
+                  
+
+<body_func>::= 	<variable_declaration_list><statements><return>
+
+<variable_declaration_list>::= <variable_declaration>
+                              | <variable_declaration> <variable_declaration_list>
+
+
+<variable_declaration>::= 'VARS'<type_specifier><name_list>';'
+
+
+
+<name_list>::= 	<variable>
+             		| <name_list>','<variable>
+             		
+
+<variable>::= 		<name>
+            		| <array>
+            		
+
+<array>::= 		<name>'['<num>']'
+
+
+<name>::= 		_*[a-zA-Z][a-zA-Z0-9_]*
+
+<num>::= 		<digit>
+       		| <digit><num>
+	   
+<digit>::= 		[0-9]
+
+<return>::= 		'RETURN' <num>
+          		|'RETURN' <name>
+		  
+
+<main_program>::=	'STARTMAIN'<main_body>'ENDMAIN'
+			| empty
+
+<main_body>::= 	<variable_declaration_list><statements>
+
+
+<statements>::= 	<statement>
+              		| <statements><statement>
+
+<statements>::= 	<assignment_statement>
+              		| <loop_statment>
+              		| <conditional_statement>
+              		| <print_statement>
+              
+
+<assignment_statement>::= <assignment>
+                         | <assignment_statement><assignment>
+
+<assignment>::= 	<variable> '=' <ar_expr>';'
+
+<ar_expr>::=  		<num>
+            		| <variable>
+            		| <ar_expr> '+' <ar_expr>			
+            		| <ar_expr> '-' <ar_expr>
+            		| <ar_expr> '*' <ar_expr>
+			| <ar_expr> '/' <ar_expr>				 
+			| <ar_expr> '^' <ar_expr>	  
+			| '('<expr>')'
+
+
+<loop_statment>::=	<while_loop>
+                 	| <for_loop>
+                 	
+
+<while_loop>::= 	'WHILE''('<condition>')' <statement> 'ENDWHILE'
+
+
+<condition>::= 	<assignment> 
+             		| <logical_expr>
+             		
+
+<logical_expr>::= 	<relational_expr><logical_op><relational_expr>
+                	| <relational_expr>
+
+<relational_expr>::= 	<ar_expr><relational_op><ar_expr>
+                   	| <ar_expr>
+
+<logical_op>::= 	AND | OR
+
+<relational_op>::= 	> | < | == | !=
+
+<for_loop>::= 		'FOR'<assignment>'TO'<num> 'STEP' <num> <statement> 'ENDFOR
+
+<conditional_statement>::= <if_statement> 
+                         | <switch_statement>
+						 
+
+<if_statement>::= 	'IF''('<condition>')' 'THEN' <statement> <if_tail>'ENDIF'	
+
+<if_tail>::= 		<elseif> 'ENDIF'
+            		|<else> 'ENDIF'
+	    		|empty
+            						   
+               	
+<elseif>::= 		'ELSEIF' '('<condition>')' <statement>
+        		|<elseif> 'ELSEIF' '('<condition>')' <statement>	 
+        			
+         
+<else>::= 		'ELSE'<statement>
+      			|<elseif> 'ELSE' <statement>
+      				
+<switch_statement>::= 	'SWITCH''('<condition>')'<case_list>'ENDSWITCH'
+
+
+<case_list>::= 	<case_line>'BREAK';
+             		| <case_line><case_list>
+			| <case_list><default>
+				
+<case_line>::=		'CASE''('<condition>')' ':'<statements>
+
+				
+				
+<default>::= 		'DEFAULT' ':'<statements>
+	
+
+<print_statement>::= 	'PRINT''(' '"'<text>'"' ',' [<variable>]')'
+			|'PRINT''(' '"'<text>'"'')'
+
+
+<text>::= 		<name> | <name><text>
+
+<newline>::= 		'\n'			

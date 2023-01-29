@@ -1,0 +1,2187 @@
+Terminals unused in grammar
+
+    LOWER_THEN_ELSE
+
+
+State 62 conflicts: 1 shift/reduce
+State 149 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: PROGRAM NAME newline structs function main_program
+
+    2 newline: NEWLINE
+    3        | %empty
+
+    4 structs: %empty
+    5        | structs struct newline
+
+    6 struct: STRUCT NAME newline variable_declaration_list newline ENDSTRUCT
+    7       | typedef
+
+    8 typedef: TYPEDEF STRUCT NAME newline variable_declaration_list newline NAME ENDSTRUCT
+
+    9 function: %empty
+   10         | FUNCTION func_declare SEMICOLON newline
+   11         | FUNCTION func_declare newline body_func END_FUNCTION
+
+   12 func_declare: NAME LEFTPAR parameter_list RIGHTPAR
+
+   13 parameter_list: parameter
+   14               | parameter_list COMMA parameter
+
+   15 parameter: type_specifier variable
+
+   16 type_specifier: CHAR
+   17               | INTEGER
+
+   18 body_func: %empty
+   19          | variable_declaration_list statements newline return
+
+   20 variable_declaration_list: variable_declaration
+   21                          | variable_declaration variable_declaration_list
+
+   22 variable_declaration: VARS type_specifier name_list SEMICOLON
+
+   23 name_list: variable
+   24          | name_list COMMA variable
+
+   25 variable: NAME
+   26         | array
+
+   27 array: NAME LEFTBRACKET num RIGHTBRACKET
+
+   28 return: RETURN num
+   29       | RETURN NAME
+
+   30 main_program: %empty
+   31             | STARTMAIN main_body ENDMAIN
+
+   32 main_body: variable_declaration_list statements
+
+   33 statements: %empty
+   34           | statements statement
+
+   35 statement: assignment_statement
+   36          | loop_statment
+   37          | conditional_statement
+   38          | print_statement
+
+   39 assignment_statement: assignment
+   40                     | assignment_statement assignment
+
+   41 assignment: variable '=' ar_expr SEMICOLON
+
+   42 ar_expr: num
+   43        | variable
+   44        | ar_expr add_op ar_expr
+   45        | ar_expr mul_op ar_expr
+   46        | ar_expr '^' ar_expr
+   47        | LEFTPAR ar_expr RIGHTPAR
+
+   48 loop_statment: while_loop
+   49              | for_loop
+
+   50 while_loop: WHILE LEFTPAR condition RIGHTPAR statements ENDWHILE
+
+   51 condition: assignment
+   52          | logical_expr
+
+   53 logical_expr: relational_expr logical_op relational_expr
+   54             | relational_expr
+
+   55 relational_expr: ar_expr relational_op ar_expr
+   56                | ar_expr
+
+   57 logical_op: AND
+   58           | OR
+
+   59 relational_op: GT
+   60              | LT
+   61              | EQ
+   62              | NE
+
+   63 for_loop: FOR assignment TO num STEP num statements ENDFOR
+
+   64 conditional_statement: if_statement
+   65                      | switch_statement
+
+   66 if_statement: IF LEFTPAR condition RIGHTPAR THEN statement if_tail
+
+   67 if_tail: elseif ENDIF
+   68        | else ENDIF
+
+   69 elseif: ELSEIF LEFTPAR condition RIGHTPAR statements
+   70       | elseif ELSEIF LEFTPAR condition RIGHTPAR statements
+
+   71 else: ELSE statements
+   72     | elseif ELSE statements
+
+   73 switch_statement: SWITCH LEFTPAR condition RIGHTPAR case_list ENDSWITCH
+
+   74 case_list: case_line BREAK SEMICOLON
+   75          | case_line case_list
+   76          | case_list default
+
+   77 case_line: CASE LEFTPAR condition RIGHTPAR UPDOWN statements
+
+   78 default: DEFAULT UPDOWN statements
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT LEFTPAR QUOTMARKS text QUOTMARKS RIGHTPAR
+
+   81 text: NAME
+   82     | text NAME
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '=' (61) 41
+    '^' (94) 46
+    error (256)
+    PROGRAM (258) 1
+    FUNCTION (259) 10 11
+    VARS (260) 22
+    END_FUNCTION (261) 11
+    RETURN (262) 28 29
+    STARTMAIN (263) 31
+    ENDMAIN (264) 31
+    IF (265) 66
+    THEN (266) 66
+    ENDIF (267) 67 68
+    ELSEIF (268) 69 70
+    ELSE (269) 71 72
+    FOR (270) 63
+    TO (271) 63
+    STEP (272) 63
+    ENDFOR (273) 63
+    WHILE (274) 50
+    ENDWHILE (275) 50
+    SWITCH (276) 73
+    CASE (277) 77
+    DEFAULT (278) 78
+    ENDSWITCH (279) 73
+    PRINT (280) 79 80
+    BREAK (281) 74
+    LEFTPAR (282) 12 47 50 66 69 70 73 77 79 80
+    RIGHTPAR (283) 12 47 50 66 69 70 73 77 79 80
+    LEFTBRACKET (284) 27 79
+    RIGHTBRACKET (285) 27 79
+    COMMA (286) 14 24 79
+    SEMICOLON (287) 10 22 41 74
+    UPDOWN (288) 77 78
+    QUOTMARKS (289) 79 80
+    STRUCT (290) 6 8
+    TYPEDEF (291) 8
+    ENDSTRUCT (292) 6 8
+    NEWLINE (293) 2
+    NAME (294) 1 6 8 12 25 27 29 81 82
+    num (295) 27 28 42 63
+    add_op (296) 44
+    mul_op (297) 45
+    GT (298) 59
+    LT (299) 60
+    EQ (300) 61
+    NE (301) 62
+    AND (302) 57
+    OR (303) 58
+    INTEGER <intval> (304) 17
+    CHAR <charval> (305) 16
+    LOWER_THEN_ELSE (306)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (54)
+        on left: 0
+    program (55)
+        on left: 1
+        on right: 0
+    newline (56)
+        on left: 2 3
+        on right: 1 5 6 8 10 11 19
+    structs (57)
+        on left: 4 5
+        on right: 1 5
+    struct (58)
+        on left: 6 7
+        on right: 5
+    typedef (59)
+        on left: 8
+        on right: 7
+    function (60)
+        on left: 9 10 11
+        on right: 1
+    func_declare (61)
+        on left: 12
+        on right: 10 11
+    parameter_list (62)
+        on left: 13 14
+        on right: 12 14
+    parameter (63)
+        on left: 15
+        on right: 13 14
+    type_specifier (64)
+        on left: 16 17
+        on right: 15 22
+    body_func (65)
+        on left: 18 19
+        on right: 11
+    variable_declaration_list (66)
+        on left: 20 21
+        on right: 6 8 19 21 32
+    variable_declaration (67)
+        on left: 22
+        on right: 20 21
+    name_list (68)
+        on left: 23 24
+        on right: 22 24
+    variable (69)
+        on left: 25 26
+        on right: 15 23 24 41 43 79
+    array (70)
+        on left: 27
+        on right: 26
+    return (71)
+        on left: 28 29
+        on right: 19
+    main_program (72)
+        on left: 30 31
+        on right: 1
+    main_body (73)
+        on left: 32
+        on right: 31
+    statements (74)
+        on left: 33 34
+        on right: 19 32 34 50 63 69 70 71 72 77 78
+    statement (75)
+        on left: 35 36 37 38
+        on right: 34 66
+    assignment_statement (76)
+        on left: 39 40
+        on right: 35 40
+    assignment (77)
+        on left: 41
+        on right: 39 40 51 63
+    ar_expr (78)
+        on left: 42 43 44 45 46 47
+        on right: 41 44 45 46 47 55 56
+    loop_statment (79)
+        on left: 48 49
+        on right: 36
+    while_loop (80)
+        on left: 50
+        on right: 48
+    condition (81)
+        on left: 51 52
+        on right: 50 66 69 70 73 77
+    logical_expr (82)
+        on left: 53 54
+        on right: 52
+    relational_expr (83)
+        on left: 55 56
+        on right: 53 54
+    logical_op (84)
+        on left: 57 58
+        on right: 53
+    relational_op (85)
+        on left: 59 60 61 62
+        on right: 55
+    for_loop (86)
+        on left: 63
+        on right: 49
+    conditional_statement (87)
+        on left: 64 65
+        on right: 37
+    if_statement (88)
+        on left: 66
+        on right: 64
+    if_tail (89)
+        on left: 67 68
+        on right: 66
+    elseif (90)
+        on left: 69 70
+        on right: 67 70 72
+    else (91)
+        on left: 71 72
+        on right: 68
+    switch_statement (92)
+        on left: 73
+        on right: 65
+    case_list (93)
+        on left: 74 75 76
+        on right: 73 75 76
+    case_line (94)
+        on left: 77
+        on right: 74 75
+    default (95)
+        on left: 78
+        on right: 76
+    print_statement (96)
+        on left: 79 80
+        on right: 38
+    text (97)
+        on left: 81 82
+        on right: 79 80 82
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PROGRAM  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: PROGRAM . NAME newline structs function main_program
+
+    NAME  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: PROGRAM NAME . newline structs function main_program
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 6
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    2 newline: NEWLINE .
+
+    $default  reduce using rule 2 (newline)
+
+
+State 6
+
+    1 program: PROGRAM NAME newline . structs function main_program
+
+    $default  reduce using rule 4 (structs)
+
+    structs  go to state 7
+
+
+State 7
+
+    1 program: PROGRAM NAME newline structs . function main_program
+    5 structs: structs . struct newline
+
+    FUNCTION  shift, and go to state 8
+    STRUCT    shift, and go to state 9
+    TYPEDEF   shift, and go to state 10
+
+    $default  reduce using rule 9 (function)
+
+    struct    go to state 11
+    typedef   go to state 12
+    function  go to state 13
+
+
+State 8
+
+   10 function: FUNCTION . func_declare SEMICOLON newline
+   11         | FUNCTION . func_declare newline body_func END_FUNCTION
+
+    NAME  shift, and go to state 14
+
+    func_declare  go to state 15
+
+
+State 9
+
+    6 struct: STRUCT . NAME newline variable_declaration_list newline ENDSTRUCT
+
+    NAME  shift, and go to state 16
+
+
+State 10
+
+    8 typedef: TYPEDEF . STRUCT NAME newline variable_declaration_list newline NAME ENDSTRUCT
+
+    STRUCT  shift, and go to state 17
+
+
+State 11
+
+    5 structs: structs struct . newline
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 18
+
+
+State 12
+
+    7 struct: typedef .
+
+    $default  reduce using rule 7 (struct)
+
+
+State 13
+
+    1 program: PROGRAM NAME newline structs function . main_program
+
+    STARTMAIN  shift, and go to state 19
+
+    $default  reduce using rule 30 (main_program)
+
+    main_program  go to state 20
+
+
+State 14
+
+   12 func_declare: NAME . LEFTPAR parameter_list RIGHTPAR
+
+    LEFTPAR  shift, and go to state 21
+
+
+State 15
+
+   10 function: FUNCTION func_declare . SEMICOLON newline
+   11         | FUNCTION func_declare . newline body_func END_FUNCTION
+
+    SEMICOLON  shift, and go to state 22
+    NEWLINE    shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 23
+
+
+State 16
+
+    6 struct: STRUCT NAME . newline variable_declaration_list newline ENDSTRUCT
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 24
+
+
+State 17
+
+    8 typedef: TYPEDEF STRUCT . NAME newline variable_declaration_list newline NAME ENDSTRUCT
+
+    NAME  shift, and go to state 25
+
+
+State 18
+
+    5 structs: structs struct newline .
+
+    $default  reduce using rule 5 (structs)
+
+
+State 19
+
+   31 main_program: STARTMAIN . main_body ENDMAIN
+
+    VARS  shift, and go to state 26
+
+    variable_declaration_list  go to state 27
+    variable_declaration       go to state 28
+    main_body                  go to state 29
+
+
+State 20
+
+    1 program: PROGRAM NAME newline structs function main_program .
+
+    $default  reduce using rule 1 (program)
+
+
+State 21
+
+   12 func_declare: NAME LEFTPAR . parameter_list RIGHTPAR
+
+    INTEGER  shift, and go to state 30
+    CHAR     shift, and go to state 31
+
+    parameter_list  go to state 32
+    parameter       go to state 33
+    type_specifier  go to state 34
+
+
+State 22
+
+   10 function: FUNCTION func_declare SEMICOLON . newline
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 35
+
+
+State 23
+
+   11 function: FUNCTION func_declare newline . body_func END_FUNCTION
+
+    VARS  shift, and go to state 26
+
+    $default  reduce using rule 18 (body_func)
+
+    body_func                  go to state 36
+    variable_declaration_list  go to state 37
+    variable_declaration       go to state 28
+
+
+State 24
+
+    6 struct: STRUCT NAME newline . variable_declaration_list newline ENDSTRUCT
+
+    VARS  shift, and go to state 26
+
+    variable_declaration_list  go to state 38
+    variable_declaration       go to state 28
+
+
+State 25
+
+    8 typedef: TYPEDEF STRUCT NAME . newline variable_declaration_list newline NAME ENDSTRUCT
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 39
+
+
+State 26
+
+   22 variable_declaration: VARS . type_specifier name_list SEMICOLON
+
+    INTEGER  shift, and go to state 30
+    CHAR     shift, and go to state 31
+
+    type_specifier  go to state 40
+
+
+State 27
+
+   32 main_body: variable_declaration_list . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 41
+
+
+State 28
+
+   20 variable_declaration_list: variable_declaration .
+   21                          | variable_declaration . variable_declaration_list
+
+    VARS  shift, and go to state 26
+
+    $default  reduce using rule 20 (variable_declaration_list)
+
+    variable_declaration_list  go to state 42
+    variable_declaration       go to state 28
+
+
+State 29
+
+   31 main_program: STARTMAIN main_body . ENDMAIN
+
+    ENDMAIN  shift, and go to state 43
+
+
+State 30
+
+   17 type_specifier: INTEGER .
+
+    $default  reduce using rule 17 (type_specifier)
+
+
+State 31
+
+   16 type_specifier: CHAR .
+
+    $default  reduce using rule 16 (type_specifier)
+
+
+State 32
+
+   12 func_declare: NAME LEFTPAR parameter_list . RIGHTPAR
+   14 parameter_list: parameter_list . COMMA parameter
+
+    RIGHTPAR  shift, and go to state 44
+    COMMA     shift, and go to state 45
+
+
+State 33
+
+   13 parameter_list: parameter .
+
+    $default  reduce using rule 13 (parameter_list)
+
+
+State 34
+
+   15 parameter: type_specifier . variable
+
+    NAME  shift, and go to state 46
+
+    variable  go to state 47
+    array     go to state 48
+
+
+State 35
+
+   10 function: FUNCTION func_declare SEMICOLON newline .
+
+    $default  reduce using rule 10 (function)
+
+
+State 36
+
+   11 function: FUNCTION func_declare newline body_func . END_FUNCTION
+
+    END_FUNCTION  shift, and go to state 49
+
+
+State 37
+
+   19 body_func: variable_declaration_list . statements newline return
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 50
+
+
+State 38
+
+    6 struct: STRUCT NAME newline variable_declaration_list . newline ENDSTRUCT
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 51
+
+
+State 39
+
+    8 typedef: TYPEDEF STRUCT NAME newline . variable_declaration_list newline NAME ENDSTRUCT
+
+    VARS  shift, and go to state 26
+
+    variable_declaration_list  go to state 52
+    variable_declaration       go to state 28
+
+
+State 40
+
+   22 variable_declaration: VARS type_specifier . name_list SEMICOLON
+
+    NAME  shift, and go to state 46
+
+    name_list  go to state 53
+    variable   go to state 54
+    array      go to state 48
+
+
+State 41
+
+   32 main_body: variable_declaration_list statements .
+   34 statements: statements . statement
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 32 (main_body)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 42
+
+   21 variable_declaration_list: variable_declaration variable_declaration_list .
+
+    $default  reduce using rule 21 (variable_declaration_list)
+
+
+State 43
+
+   31 main_program: STARTMAIN main_body ENDMAIN .
+
+    $default  reduce using rule 31 (main_program)
+
+
+State 44
+
+   12 func_declare: NAME LEFTPAR parameter_list RIGHTPAR .
+
+    $default  reduce using rule 12 (func_declare)
+
+
+State 45
+
+   14 parameter_list: parameter_list COMMA . parameter
+
+    INTEGER  shift, and go to state 30
+    CHAR     shift, and go to state 31
+
+    parameter       go to state 71
+    type_specifier  go to state 34
+
+
+State 46
+
+   25 variable: NAME .
+   27 array: NAME . LEFTBRACKET num RIGHTBRACKET
+
+    LEFTBRACKET  shift, and go to state 72
+
+    $default  reduce using rule 25 (variable)
+
+
+State 47
+
+   15 parameter: type_specifier variable .
+
+    $default  reduce using rule 15 (parameter)
+
+
+State 48
+
+   26 variable: array .
+
+    $default  reduce using rule 26 (variable)
+
+
+State 49
+
+   11 function: FUNCTION func_declare newline body_func END_FUNCTION .
+
+    $default  reduce using rule 11 (function)
+
+
+State 50
+
+   19 body_func: variable_declaration_list statements . newline return
+   34 statements: statements . statement
+
+    IF       shift, and go to state 55
+    FOR      shift, and go to state 56
+    WHILE    shift, and go to state 57
+    SWITCH   shift, and go to state 58
+    PRINT    shift, and go to state 59
+    NEWLINE  shift, and go to state 5
+    NAME     shift, and go to state 46
+
+    $default  reduce using rule 3 (newline)
+
+    newline                go to state 73
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 51
+
+    6 struct: STRUCT NAME newline variable_declaration_list newline . ENDSTRUCT
+
+    ENDSTRUCT  shift, and go to state 74
+
+
+State 52
+
+    8 typedef: TYPEDEF STRUCT NAME newline variable_declaration_list . newline NAME ENDSTRUCT
+
+    NEWLINE  shift, and go to state 5
+
+    $default  reduce using rule 3 (newline)
+
+    newline  go to state 75
+
+
+State 53
+
+   22 variable_declaration: VARS type_specifier name_list . SEMICOLON
+   24 name_list: name_list . COMMA variable
+
+    COMMA      shift, and go to state 76
+    SEMICOLON  shift, and go to state 77
+
+
+State 54
+
+   23 name_list: variable .
+
+    $default  reduce using rule 23 (name_list)
+
+
+State 55
+
+   66 if_statement: IF . LEFTPAR condition RIGHTPAR THEN statement if_tail
+
+    LEFTPAR  shift, and go to state 78
+
+
+State 56
+
+   63 for_loop: FOR . assignment TO num STEP num statements ENDFOR
+
+    NAME  shift, and go to state 46
+
+    variable    go to state 60
+    array       go to state 48
+    assignment  go to state 79
+
+
+State 57
+
+   50 while_loop: WHILE . LEFTPAR condition RIGHTPAR statements ENDWHILE
+
+    LEFTPAR  shift, and go to state 80
+
+
+State 58
+
+   73 switch_statement: SWITCH . LEFTPAR condition RIGHTPAR case_list ENDSWITCH
+
+    LEFTPAR  shift, and go to state 81
+
+
+State 59
+
+   79 print_statement: PRINT . LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT . LEFTPAR QUOTMARKS text QUOTMARKS RIGHTPAR
+
+    LEFTPAR  shift, and go to state 82
+
+
+State 60
+
+   41 assignment: variable . '=' ar_expr SEMICOLON
+
+    '='  shift, and go to state 83
+
+
+State 61
+
+   34 statements: statements statement .
+
+    $default  reduce using rule 34 (statements)
+
+
+State 62
+
+   35 statement: assignment_statement .
+   40 assignment_statement: assignment_statement . assignment
+
+    NAME  shift, and go to state 46
+
+    NAME      [reduce using rule 35 (statement)]
+    $default  reduce using rule 35 (statement)
+
+    variable    go to state 60
+    array       go to state 48
+    assignment  go to state 84
+
+
+State 63
+
+   39 assignment_statement: assignment .
+
+    $default  reduce using rule 39 (assignment_statement)
+
+
+State 64
+
+   36 statement: loop_statment .
+
+    $default  reduce using rule 36 (statement)
+
+
+State 65
+
+   48 loop_statment: while_loop .
+
+    $default  reduce using rule 48 (loop_statment)
+
+
+State 66
+
+   49 loop_statment: for_loop .
+
+    $default  reduce using rule 49 (loop_statment)
+
+
+State 67
+
+   37 statement: conditional_statement .
+
+    $default  reduce using rule 37 (statement)
+
+
+State 68
+
+   64 conditional_statement: if_statement .
+
+    $default  reduce using rule 64 (conditional_statement)
+
+
+State 69
+
+   65 conditional_statement: switch_statement .
+
+    $default  reduce using rule 65 (conditional_statement)
+
+
+State 70
+
+   38 statement: print_statement .
+
+    $default  reduce using rule 38 (statement)
+
+
+State 71
+
+   14 parameter_list: parameter_list COMMA parameter .
+
+    $default  reduce using rule 14 (parameter_list)
+
+
+State 72
+
+   27 array: NAME LEFTBRACKET . num RIGHTBRACKET
+
+    num  shift, and go to state 85
+
+
+State 73
+
+   19 body_func: variable_declaration_list statements newline . return
+
+    RETURN  shift, and go to state 86
+
+    return  go to state 87
+
+
+State 74
+
+    6 struct: STRUCT NAME newline variable_declaration_list newline ENDSTRUCT .
+
+    $default  reduce using rule 6 (struct)
+
+
+State 75
+
+    8 typedef: TYPEDEF STRUCT NAME newline variable_declaration_list newline . NAME ENDSTRUCT
+
+    NAME  shift, and go to state 88
+
+
+State 76
+
+   24 name_list: name_list COMMA . variable
+
+    NAME  shift, and go to state 46
+
+    variable  go to state 89
+    array     go to state 48
+
+
+State 77
+
+   22 variable_declaration: VARS type_specifier name_list SEMICOLON .
+
+    $default  reduce using rule 22 (variable_declaration)
+
+
+State 78
+
+   66 if_statement: IF LEFTPAR . condition RIGHTPAR THEN statement if_tail
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 95
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 79
+
+   63 for_loop: FOR assignment . TO num STEP num statements ENDFOR
+
+    TO  shift, and go to state 98
+
+
+State 80
+
+   50 while_loop: WHILE LEFTPAR . condition RIGHTPAR statements ENDWHILE
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 99
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 81
+
+   73 switch_statement: SWITCH LEFTPAR . condition RIGHTPAR case_list ENDSWITCH
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 100
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 82
+
+   79 print_statement: PRINT LEFTPAR . QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT LEFTPAR . QUOTMARKS text QUOTMARKS RIGHTPAR
+
+    QUOTMARKS  shift, and go to state 101
+
+
+State 83
+
+   41 assignment: variable '=' . ar_expr SEMICOLON
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 103
+
+
+State 84
+
+   40 assignment_statement: assignment_statement assignment .
+
+    $default  reduce using rule 40 (assignment_statement)
+
+
+State 85
+
+   27 array: NAME LEFTBRACKET num . RIGHTBRACKET
+
+    RIGHTBRACKET  shift, and go to state 104
+
+
+State 86
+
+   28 return: RETURN . num
+   29       | RETURN . NAME
+
+    NAME  shift, and go to state 105
+    num   shift, and go to state 106
+
+
+State 87
+
+   19 body_func: variable_declaration_list statements newline return .
+
+    $default  reduce using rule 19 (body_func)
+
+
+State 88
+
+    8 typedef: TYPEDEF STRUCT NAME newline variable_declaration_list newline NAME . ENDSTRUCT
+
+    ENDSTRUCT  shift, and go to state 107
+
+
+State 89
+
+   24 name_list: name_list COMMA variable .
+
+    $default  reduce using rule 24 (name_list)
+
+
+State 90
+
+   47 ar_expr: LEFTPAR . ar_expr RIGHTPAR
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 108
+
+
+State 91
+
+   42 ar_expr: num .
+
+    $default  reduce using rule 42 (ar_expr)
+
+
+State 92
+
+   41 assignment: variable . '=' ar_expr SEMICOLON
+   43 ar_expr: variable .
+
+    '='  shift, and go to state 83
+
+    $default  reduce using rule 43 (ar_expr)
+
+
+State 93
+
+   51 condition: assignment .
+
+    $default  reduce using rule 51 (condition)
+
+
+State 94
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+   55 relational_expr: ar_expr . relational_op ar_expr
+   56                | ar_expr .
+
+    add_op  shift, and go to state 109
+    mul_op  shift, and go to state 110
+    GT      shift, and go to state 111
+    LT      shift, and go to state 112
+    EQ      shift, and go to state 113
+    NE      shift, and go to state 114
+    '^'     shift, and go to state 115
+
+    $default  reduce using rule 56 (relational_expr)
+
+    relational_op  go to state 116
+
+
+State 95
+
+   66 if_statement: IF LEFTPAR condition . RIGHTPAR THEN statement if_tail
+
+    RIGHTPAR  shift, and go to state 117
+
+
+State 96
+
+   52 condition: logical_expr .
+
+    $default  reduce using rule 52 (condition)
+
+
+State 97
+
+   53 logical_expr: relational_expr . logical_op relational_expr
+   54             | relational_expr .
+
+    AND  shift, and go to state 118
+    OR   shift, and go to state 119
+
+    $default  reduce using rule 54 (logical_expr)
+
+    logical_op  go to state 120
+
+
+State 98
+
+   63 for_loop: FOR assignment TO . num STEP num statements ENDFOR
+
+    num  shift, and go to state 121
+
+
+State 99
+
+   50 while_loop: WHILE LEFTPAR condition . RIGHTPAR statements ENDWHILE
+
+    RIGHTPAR  shift, and go to state 122
+
+
+State 100
+
+   73 switch_statement: SWITCH LEFTPAR condition . RIGHTPAR case_list ENDSWITCH
+
+    RIGHTPAR  shift, and go to state 123
+
+
+State 101
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS . text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT LEFTPAR QUOTMARKS . text QUOTMARKS RIGHTPAR
+
+    NAME  shift, and go to state 124
+
+    text  go to state 125
+
+
+State 102
+
+   43 ar_expr: variable .
+
+    $default  reduce using rule 43 (ar_expr)
+
+
+State 103
+
+   41 assignment: variable '=' ar_expr . SEMICOLON
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+
+    SEMICOLON  shift, and go to state 126
+    add_op     shift, and go to state 109
+    mul_op     shift, and go to state 110
+    '^'        shift, and go to state 115
+
+
+State 104
+
+   27 array: NAME LEFTBRACKET num RIGHTBRACKET .
+
+    $default  reduce using rule 27 (array)
+
+
+State 105
+
+   29 return: RETURN NAME .
+
+    $default  reduce using rule 29 (return)
+
+
+State 106
+
+   28 return: RETURN num .
+
+    $default  reduce using rule 28 (return)
+
+
+State 107
+
+    8 typedef: TYPEDEF STRUCT NAME newline variable_declaration_list newline NAME ENDSTRUCT .
+
+    $default  reduce using rule 8 (typedef)
+
+
+State 108
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+   47        | LEFTPAR ar_expr . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 127
+    add_op    shift, and go to state 109
+    mul_op    shift, and go to state 110
+    '^'       shift, and go to state 115
+
+
+State 109
+
+   44 ar_expr: ar_expr add_op . ar_expr
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 128
+
+
+State 110
+
+   45 ar_expr: ar_expr mul_op . ar_expr
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 129
+
+
+State 111
+
+   59 relational_op: GT .
+
+    $default  reduce using rule 59 (relational_op)
+
+
+State 112
+
+   60 relational_op: LT .
+
+    $default  reduce using rule 60 (relational_op)
+
+
+State 113
+
+   61 relational_op: EQ .
+
+    $default  reduce using rule 61 (relational_op)
+
+
+State 114
+
+   62 relational_op: NE .
+
+    $default  reduce using rule 62 (relational_op)
+
+
+State 115
+
+   46 ar_expr: ar_expr '^' . ar_expr
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 130
+
+
+State 116
+
+   55 relational_expr: ar_expr relational_op . ar_expr
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable  go to state 102
+    array     go to state 48
+    ar_expr   go to state 131
+
+
+State 117
+
+   66 if_statement: IF LEFTPAR condition RIGHTPAR . THEN statement if_tail
+
+    THEN  shift, and go to state 132
+
+
+State 118
+
+   57 logical_op: AND .
+
+    $default  reduce using rule 57 (logical_op)
+
+
+State 119
+
+   58 logical_op: OR .
+
+    $default  reduce using rule 58 (logical_op)
+
+
+State 120
+
+   53 logical_expr: relational_expr logical_op . relational_expr
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 102
+    array            go to state 48
+    ar_expr          go to state 94
+    relational_expr  go to state 133
+
+
+State 121
+
+   63 for_loop: FOR assignment TO num . STEP num statements ENDFOR
+
+    STEP  shift, and go to state 134
+
+
+State 122
+
+   50 while_loop: WHILE LEFTPAR condition RIGHTPAR . statements ENDWHILE
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 135
+
+
+State 123
+
+   73 switch_statement: SWITCH LEFTPAR condition RIGHTPAR . case_list ENDSWITCH
+
+    CASE  shift, and go to state 136
+
+    case_list  go to state 137
+    case_line  go to state 138
+
+
+State 124
+
+   81 text: NAME .
+
+    $default  reduce using rule 81 (text)
+
+
+State 125
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text . QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT LEFTPAR QUOTMARKS text . QUOTMARKS RIGHTPAR
+   82 text: text . NAME
+
+    QUOTMARKS  shift, and go to state 139
+    NAME       shift, and go to state 140
+
+
+State 126
+
+   41 assignment: variable '=' ar_expr SEMICOLON .
+
+    $default  reduce using rule 41 (assignment)
+
+
+State 127
+
+   47 ar_expr: LEFTPAR ar_expr RIGHTPAR .
+
+    $default  reduce using rule 47 (ar_expr)
+
+
+State 128
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   44        | ar_expr add_op ar_expr .
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+
+    mul_op  shift, and go to state 110
+    '^'     shift, and go to state 115
+
+    $default  reduce using rule 44 (ar_expr)
+
+
+State 129
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   45        | ar_expr mul_op ar_expr .
+   46        | ar_expr . '^' ar_expr
+
+    '^'  shift, and go to state 115
+
+    $default  reduce using rule 45 (ar_expr)
+
+
+State 130
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+   46        | ar_expr '^' ar_expr .
+
+    '^'  shift, and go to state 115
+
+    $default  reduce using rule 46 (ar_expr)
+
+
+State 131
+
+   44 ar_expr: ar_expr . add_op ar_expr
+   45        | ar_expr . mul_op ar_expr
+   46        | ar_expr . '^' ar_expr
+   55 relational_expr: ar_expr relational_op ar_expr .
+
+    add_op  shift, and go to state 109
+    mul_op  shift, and go to state 110
+    '^'     shift, and go to state 115
+
+    $default  reduce using rule 55 (relational_expr)
+
+
+State 132
+
+   66 if_statement: IF LEFTPAR condition RIGHTPAR THEN . statement if_tail
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 141
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 133
+
+   53 logical_expr: relational_expr logical_op relational_expr .
+
+    $default  reduce using rule 53 (logical_expr)
+
+
+State 134
+
+   63 for_loop: FOR assignment TO num STEP . num statements ENDFOR
+
+    num  shift, and go to state 142
+
+
+State 135
+
+   34 statements: statements . statement
+   50 while_loop: WHILE LEFTPAR condition RIGHTPAR statements . ENDWHILE
+
+    IF        shift, and go to state 55
+    FOR       shift, and go to state 56
+    WHILE     shift, and go to state 57
+    ENDWHILE  shift, and go to state 143
+    SWITCH    shift, and go to state 58
+    PRINT     shift, and go to state 59
+    NAME      shift, and go to state 46
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 136
+
+   77 case_line: CASE . LEFTPAR condition RIGHTPAR UPDOWN statements
+
+    LEFTPAR  shift, and go to state 144
+
+
+State 137
+
+   73 switch_statement: SWITCH LEFTPAR condition RIGHTPAR case_list . ENDSWITCH
+   76 case_list: case_list . default
+
+    DEFAULT    shift, and go to state 145
+    ENDSWITCH  shift, and go to state 146
+
+    default  go to state 147
+
+
+State 138
+
+   74 case_list: case_line . BREAK SEMICOLON
+   75          | case_line . case_list
+
+    CASE   shift, and go to state 136
+    BREAK  shift, and go to state 148
+
+    case_list  go to state 149
+    case_line  go to state 138
+
+
+State 139
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS . COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+   80                | PRINT LEFTPAR QUOTMARKS text QUOTMARKS . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 150
+    COMMA     shift, and go to state 151
+
+
+State 140
+
+   82 text: text NAME .
+
+    $default  reduce using rule 82 (text)
+
+
+State 141
+
+   66 if_statement: IF LEFTPAR condition RIGHTPAR THEN statement . if_tail
+
+    ELSEIF  shift, and go to state 152
+    ELSE    shift, and go to state 153
+
+    if_tail  go to state 154
+    elseif   go to state 155
+    else     go to state 156
+
+
+State 142
+
+   63 for_loop: FOR assignment TO num STEP num . statements ENDFOR
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 157
+
+
+State 143
+
+   50 while_loop: WHILE LEFTPAR condition RIGHTPAR statements ENDWHILE .
+
+    $default  reduce using rule 50 (while_loop)
+
+
+State 144
+
+   77 case_line: CASE LEFTPAR . condition RIGHTPAR UPDOWN statements
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 158
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 145
+
+   78 default: DEFAULT . UPDOWN statements
+
+    UPDOWN  shift, and go to state 159
+
+
+State 146
+
+   73 switch_statement: SWITCH LEFTPAR condition RIGHTPAR case_list ENDSWITCH .
+
+    $default  reduce using rule 73 (switch_statement)
+
+
+State 147
+
+   76 case_list: case_list default .
+
+    $default  reduce using rule 76 (case_list)
+
+
+State 148
+
+   74 case_list: case_line BREAK . SEMICOLON
+
+    SEMICOLON  shift, and go to state 160
+
+
+State 149
+
+   75 case_list: case_line case_list .
+   76          | case_list . default
+
+    DEFAULT  shift, and go to state 145
+
+    DEFAULT   [reduce using rule 75 (case_list)]
+    $default  reduce using rule 75 (case_list)
+
+    default  go to state 147
+
+
+State 150
+
+   80 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS RIGHTPAR .
+
+    $default  reduce using rule 80 (print_statement)
+
+
+State 151
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA . LEFTBRACKET variable RIGHTBRACKET RIGHTPAR
+
+    LEFTBRACKET  shift, and go to state 161
+
+
+State 152
+
+   69 elseif: ELSEIF . LEFTPAR condition RIGHTPAR statements
+
+    LEFTPAR  shift, and go to state 162
+
+
+State 153
+
+   71 else: ELSE . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 163
+
+
+State 154
+
+   66 if_statement: IF LEFTPAR condition RIGHTPAR THEN statement if_tail .
+
+    $default  reduce using rule 66 (if_statement)
+
+
+State 155
+
+   67 if_tail: elseif . ENDIF
+   70 elseif: elseif . ELSEIF LEFTPAR condition RIGHTPAR statements
+   72 else: elseif . ELSE statements
+
+    ENDIF   shift, and go to state 164
+    ELSEIF  shift, and go to state 165
+    ELSE    shift, and go to state 166
+
+
+State 156
+
+   68 if_tail: else . ENDIF
+
+    ENDIF  shift, and go to state 167
+
+
+State 157
+
+   34 statements: statements . statement
+   63 for_loop: FOR assignment TO num STEP num statements . ENDFOR
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    ENDFOR  shift, and go to state 168
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 158
+
+   77 case_line: CASE LEFTPAR condition . RIGHTPAR UPDOWN statements
+
+    RIGHTPAR  shift, and go to state 169
+
+
+State 159
+
+   78 default: DEFAULT UPDOWN . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 170
+
+
+State 160
+
+   74 case_list: case_line BREAK SEMICOLON .
+
+    $default  reduce using rule 74 (case_list)
+
+
+State 161
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET . variable RIGHTBRACKET RIGHTPAR
+
+    NAME  shift, and go to state 46
+
+    variable  go to state 171
+    array     go to state 48
+
+
+State 162
+
+   69 elseif: ELSEIF LEFTPAR . condition RIGHTPAR statements
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 172
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 163
+
+   34 statements: statements . statement
+   71 else: ELSE statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 71 (else)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 164
+
+   67 if_tail: elseif ENDIF .
+
+    $default  reduce using rule 67 (if_tail)
+
+
+State 165
+
+   70 elseif: elseif ELSEIF . LEFTPAR condition RIGHTPAR statements
+
+    LEFTPAR  shift, and go to state 173
+
+
+State 166
+
+   72 else: elseif ELSE . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 174
+
+
+State 167
+
+   68 if_tail: else ENDIF .
+
+    $default  reduce using rule 68 (if_tail)
+
+
+State 168
+
+   63 for_loop: FOR assignment TO num STEP num statements ENDFOR .
+
+    $default  reduce using rule 63 (for_loop)
+
+
+State 169
+
+   77 case_line: CASE LEFTPAR condition RIGHTPAR . UPDOWN statements
+
+    UPDOWN  shift, and go to state 175
+
+
+State 170
+
+   34 statements: statements . statement
+   78 default: DEFAULT UPDOWN statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 78 (default)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 171
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable . RIGHTBRACKET RIGHTPAR
+
+    RIGHTBRACKET  shift, and go to state 176
+
+
+State 172
+
+   69 elseif: ELSEIF LEFTPAR condition . RIGHTPAR statements
+
+    RIGHTPAR  shift, and go to state 177
+
+
+State 173
+
+   70 elseif: elseif ELSEIF LEFTPAR . condition RIGHTPAR statements
+
+    LEFTPAR  shift, and go to state 90
+    NAME     shift, and go to state 46
+    num      shift, and go to state 91
+
+    variable         go to state 92
+    array            go to state 48
+    assignment       go to state 93
+    ar_expr          go to state 94
+    condition        go to state 178
+    logical_expr     go to state 96
+    relational_expr  go to state 97
+
+
+State 174
+
+   34 statements: statements . statement
+   72 else: elseif ELSE statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 72 (else)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 175
+
+   77 case_line: CASE LEFTPAR condition RIGHTPAR UPDOWN . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 179
+
+
+State 176
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET . RIGHTPAR
+
+    RIGHTPAR  shift, and go to state 180
+
+
+State 177
+
+   69 elseif: ELSEIF LEFTPAR condition RIGHTPAR . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 181
+
+
+State 178
+
+   70 elseif: elseif ELSEIF LEFTPAR condition . RIGHTPAR statements
+
+    RIGHTPAR  shift, and go to state 182
+
+
+State 179
+
+   34 statements: statements . statement
+   77 case_line: CASE LEFTPAR condition RIGHTPAR UPDOWN statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 77 (case_line)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 180
+
+   79 print_statement: PRINT LEFTPAR QUOTMARKS text QUOTMARKS COMMA LEFTBRACKET variable RIGHTBRACKET RIGHTPAR .
+
+    $default  reduce using rule 79 (print_statement)
+
+
+State 181
+
+   34 statements: statements . statement
+   69 elseif: ELSEIF LEFTPAR condition RIGHTPAR statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 69 (elseif)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
+
+
+State 182
+
+   70 elseif: elseif ELSEIF LEFTPAR condition RIGHTPAR . statements
+
+    $default  reduce using rule 33 (statements)
+
+    statements  go to state 183
+
+
+State 183
+
+   34 statements: statements . statement
+   70 elseif: elseif ELSEIF LEFTPAR condition RIGHTPAR statements .
+
+    IF      shift, and go to state 55
+    FOR     shift, and go to state 56
+    WHILE   shift, and go to state 57
+    SWITCH  shift, and go to state 58
+    PRINT   shift, and go to state 59
+    NAME    shift, and go to state 46
+
+    $default  reduce using rule 70 (elseif)
+
+    variable               go to state 60
+    array                  go to state 48
+    statement              go to state 61
+    assignment_statement   go to state 62
+    assignment             go to state 63
+    loop_statment          go to state 64
+    while_loop             go to state 65
+    for_loop               go to state 66
+    conditional_statement  go to state 67
+    if_statement           go to state 68
+    switch_statement       go to state 69
+    print_statement        go to state 70
