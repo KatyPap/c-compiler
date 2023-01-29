@@ -1,1 +1,1 @@
-# c-compiler
+Project for the compulsory subject of Principles of Programming Languages and Compilers (CEID, Accademic year: 2020-2021). Tools used: Flex/Bison. Development of a compiler that reads a C-like language.
